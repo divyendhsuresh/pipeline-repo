@@ -1,18 +1,9 @@
 # Maven
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '11'
-    jdkArchitectureOption: 'x64'
-    jdkSourceOption: 'PreInstalled'
 # Build your Java project and run tests with Apache Maven.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
-- task: SonarQubePublish@5
-  inputs:
-    pollingTimeoutSec: '300'
 trigger:
 - main
-
 pool:
   vmImage: ubuntu-latest
 
@@ -27,3 +18,20 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'clean test package'
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '11'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+- task: SonarQubePrepare@5
+  inputs:
+    SonarQube: 'sonar-test'
+    scannerMode: 'MSBuild'
+    projectKey: 'learn-devops_divyendh-suresh_AYFME7IHaYArLHti3wgq'
+    projectName: 'divyendh-suresh'
+- task: SonarQubePublish@5
+  inputs:
+    pollingTimeoutSec: '300'  
